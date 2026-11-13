@@ -18,15 +18,17 @@ import {
 import DateCalendar from '../components/DateCalendar';
 import TimeSlotPicker from '../components/TimeSlotPicker';
 import {useAuth} from '../context/AuthContext';
+import {useCategories} from '../context/CategoriesContext';
 import {useLanguage} from '../context/LanguageContext';
-import {categoryLabelKey, errorText} from '../i18n/translations';
+import {errorText} from '../i18n/translations';
 import {mapUrl, openLink, phoneUrl} from '../openLink';
-import {categoryColor, colors, statusKey, statusMeta} from '../theme';
+import {colors, statusKey, statusMeta} from '../theme';
 
 export default function OrderDetailScreen({route, navigation}) {
   const {orderId} = route.params;
   const {token} = useAuth();
   const {t} = useLanguage();
+  const {label: categoryLabel, color: categoryColor} = useCategories();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -163,7 +165,6 @@ export default function OrderDetailScreen({route, navigation}) {
 
   const status = statusMeta(order.status);
   const catColor = categoryColor(order.category);
-  const categoryKey = categoryLabelKey(order.category);
   const rows = [
     [t('order.client'), order.clientName],
     [t('order.phone'), order.clientPhone],
@@ -185,7 +186,7 @@ export default function OrderDetailScreen({route, navigation}) {
       <View style={styles.row}>
         <View style={[styles.badge, {backgroundColor: `${catColor}1A`}]}>
           <Text style={[styles.badgeText, {color: catColor}]}>
-            {categoryKey ? t(categoryKey) : order.category}
+            {categoryLabel(order.category)}
           </Text>
         </View>
         <View style={[styles.badge, {backgroundColor: status.bg}]}>

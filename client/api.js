@@ -1,11 +1,13 @@
 import {Platform} from 'react-native';
 
 /**
- * Simulators / emulators:
+ * Release builds use the production API.
+ * Debug builds on simulators / emulators:
  *   iOS Simulator → localhost
  *   Android Emulator → 10.0.2.2
- * Physical device: set USE_PHYSICAL_DEVICE = true and LAN_IP to your machine.
+ * Physical device in debug: set USE_PHYSICAL_DEVICE = true and LAN_IP to your machine.
  */
+const PRODUCTION_API_URL = 'https://home-service-api.annaniks.com/api';
 const USE_PHYSICAL_DEVICE = false;
 const LAN_IP = '192.168.100.114';
 
@@ -15,7 +17,7 @@ const host = USE_PHYSICAL_DEVICE
     ? '10.0.2.2'
     : 'localhost';
 
-export const API_BASE_URL = `http://${host}:5000/api`;
+export const API_BASE_URL = __DEV__ ? `http://${host}:5000/api` : PRODUCTION_API_URL;
 
 async function request(path, {method = 'GET', token, body} = {}) {
   const headers = {
@@ -62,7 +64,7 @@ export function loginRequest(username, password) {
 
 export function fetchOrders(token, {category, status, date, q} = {}) {
   const params = new URLSearchParams();
-  if (category && category !== 'Все') {
+  if (category && category !== 'all') {
     params.set('category', category);
   }
   if (status && status !== 'all') {
@@ -98,6 +100,10 @@ export function fetchWorkers(token, {category, date, timeSlot, excludeOrderId} =
   }
   const query = params.toString();
   return request(`/workers${query ? `?${query}` : ''}`, {token});
+}
+
+export function fetchCategories(token) {
+  return request('/categories', {token});
 }
 
 export function fetchSchedule(token, date) {

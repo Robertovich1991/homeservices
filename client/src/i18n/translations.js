@@ -37,9 +37,10 @@ const en = {
   'order.assignFailed': 'Could not assign the order',
   'order.loadFailed': 'Could not open the order',
   'category.all': 'All',
-  'category.plumbing': 'Plumbing',
-  'category.cleaning': 'Cleaning',
-  'category.painting': 'Painting',
+  'error.tooManyLogins': 'Too many sign-in attempts. Try again in a few minutes.',
+  'error.sessionExpired': 'Your session has ended. Sign in again.',
+  'error.forbidden': 'You do not have access to this action.',
+  'error.categoryNotFound': 'Category not found',
   'status.new': 'New',
   'status.assigned': 'Assigned',
   'status.completed': 'Completed',
@@ -158,9 +159,11 @@ const ru = {
   'order.assignFailed': 'Не удалось назначить',
   'order.loadFailed': 'Ошибка',
   'category.all': 'Все',
-  'category.plumbing': 'Сантехника',
-  'category.cleaning': 'Чистота',
-  'category.painting': 'Покраска',
+  'error.tooManyLogins':
+    'Слишком много попыток входа. Повторите через несколько минут.',
+  'error.sessionExpired': 'Сессия завершена. Войдите снова.',
+  'error.forbidden': 'У вас нет доступа к этому действию.',
+  'error.categoryNotFound': 'Категория не найдена',
   'status.new': 'Новый',
   'status.assigned': 'Назначен',
   'status.completed': 'Завершён',
@@ -279,9 +282,11 @@ const de = {
   'order.assignFailed': 'Zuweisen fehlgeschlagen',
   'order.loadFailed': 'Auftrag konnte nicht geöffnet werden',
   'category.all': 'Alle',
-  'category.plumbing': 'Sanitär',
-  'category.cleaning': 'Reinigung',
-  'category.painting': 'Malerarbeiten',
+  'error.tooManyLogins':
+    'Zu viele Anmeldeversuche. Bitte in einigen Minuten erneut versuchen.',
+  'error.sessionExpired': 'Ihre Sitzung ist abgelaufen. Bitte erneut anmelden.',
+  'error.forbidden': 'Für diese Aktion fehlt Ihnen die Berechtigung.',
+  'error.categoryNotFound': 'Kategorie nicht gefunden',
   'status.new': 'Neu',
   'status.assigned': 'Zugewiesen',
   'status.completed': 'Abgeschlossen',
@@ -383,19 +388,13 @@ export function translate(language, key, vars) {
   );
 }
 
-const CATEGORY_KEYS = {
-  Все: 'category.all',
-  Сантехника: 'category.plumbing',
-  Чистота: 'category.cleaning',
-  Покраска: 'category.painting',
-};
-
-export function categoryLabelKey(apiCategory) {
-  return CATEGORY_KEYS[apiCategory] || null;
-}
-
 const SERVER_MESSAGE_KEYS = {
   'Invalid username or password': 'error.invalidLogin',
+  'Too many login attempts, try again later': 'error.tooManyLogins',
+  'Invalid token': 'error.sessionExpired',
+  'Missing token': 'error.sessionExpired',
+  Forbidden: 'error.forbidden',
+  'Category not found': 'error.categoryNotFound',
   'Order not found': 'error.notFound',
   'workerName, date, and timeSlot are required': 'error.assignRequired',
   'workerId, date, and timeSlot are required': 'error.assignRequired',

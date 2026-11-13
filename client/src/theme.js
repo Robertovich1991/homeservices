@@ -14,22 +14,6 @@ export const colors = {
   done: '#5B6B7C',
   doneBg: '#EEF1F5',
   danger: '#C0392B',
-  plumbing: '#1F6F8B',
-  cleaning: '#2A9D8F',
-  painting: '#C17C3A',
-};
-
-export const categoryColor = category => {
-  if (category === 'Сантехника') {
-    return colors.plumbing;
-  }
-  if (category === 'Чистота') {
-    return colors.cleaning;
-  }
-  if (category === 'Покраска') {
-    return colors.painting;
-  }
-  return colors.primary;
 };
 
 export function statusKey(status) {

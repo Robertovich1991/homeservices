@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {fetchOrders} from '../../api';
-import CategoryChips from '../components/CategoryChips';
+import CategoryChips, {ALL_CATEGORIES} from '../components/CategoryChips';
 import DateCalendar from '../components/DateCalendar';
 import OrderCard from '../components/OrderCard';
 import {useAuth} from '../context/AuthContext';
@@ -26,7 +26,7 @@ const STATUSES = ['all', 'new', 'assigned', 'completed', 'cancelled'];
 export default function OrderListScreen({navigation}) {
   const {token} = useAuth();
   const {t} = useLanguage();
-  const [category, setCategory] = useState('Все');
+  const [category, setCategory] = useState(ALL_CATEGORIES);
   const [status, setStatus] = useState('all');
   const [date, setDate] = useState('');
   const [showDate, setShowDate] = useState(false);
@@ -80,7 +80,7 @@ export default function OrderListScreen({navigation}) {
   );
 
   const filtered =
-    category !== 'Все' || status !== 'all' || Boolean(date) || Boolean(query.trim());
+    category !== ALL_CATEGORIES || status !== 'all' || Boolean(date) || Boolean(query.trim());
 
   return (
     <View style={styles.container}>

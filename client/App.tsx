@@ -4,6 +4,7 @@ import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {AuthProvider, useAuth} from './src/context/AuthContext';
+import {CategoriesProvider} from './src/context/CategoriesContext';
 import {LanguageProvider, useLanguage} from './src/context/LanguageContext';
 import LoginScreen from './src/screens/LoginScreen';
 import DayBoardScreen from './src/screens/DayBoardScreen';
@@ -100,9 +101,11 @@ export default function App() {
       <StatusBar barStyle="dark-content" backgroundColor={colors.bg} />
       <LanguageProvider>
         <AuthProvider>
-          <NavigationContainer>
-            <RootNavigator />
-          </NavigationContainer>
+          <CategoriesProvider>
+            <NavigationContainer>
+              <RootNavigator />
+            </NavigationContainer>
+          </CategoriesProvider>
         </AuthProvider>
       </LanguageProvider>
     </SafeAreaProvider>

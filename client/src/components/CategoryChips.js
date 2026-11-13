@@ -1,24 +1,25 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {useCategories} from '../context/CategoriesContext';
 import {useLanguage} from '../context/LanguageContext';
-import {categoryLabelKey} from '../i18n/translations';
-import {categoryColor, colors} from '../theme';
+import {colors} from '../theme';
 
-export const CATEGORIES = ['Все', 'Сантехника', 'Чистота', 'Покраска'];
+export const ALL_CATEGORIES = 'all';
 
 export default function CategoryChips({selected, onSelect}) {
   const {t} = useLanguage();
+  const {categories, label, color} = useCategories();
+  const options = [ALL_CATEGORIES, ...categories.map(category => category.id)];
 
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.row}>
-      {CATEGORIES.map(category => {
+      {options.map(category => {
         const active = selected === category;
         const tint =
-          category === 'Все' ? colors.primary : categoryColor(category);
-        const labelKey = categoryLabelKey(category);
+          category === ALL_CATEGORIES ? colors.primary : color(category);
         return (
           <TouchableOpacity
             key={category}
@@ -30,7 +31,9 @@ export default function CategoryChips({selected, onSelect}) {
             accessibilityRole="button"
             accessibilityState={{selected: active}}>
             <Text style={[styles.label, active && styles.labelActive]}>
-              {labelKey ? t(labelKey) : category}
+              {category === ALL_CATEGORIES
+                ? t('category.all')
+                : label(category)}
             </Text>
           </TouchableOpacity>
         );

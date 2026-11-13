@@ -1,14 +1,14 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useCategories} from '../context/CategoriesContext';
 import {useLanguage} from '../context/LanguageContext';
-import {categoryLabelKey} from '../i18n/translations';
-import {categoryColor, colors, statusKey, statusMeta} from '../theme';
+import {colors, statusKey, statusMeta} from '../theme';
 
 export default function OrderCard({order, onPress}) {
   const {t} = useLanguage();
+  const {label, color} = useCategories();
   const status = statusMeta(order.status);
-  const catColor = categoryColor(order.category);
-  const categoryKey = categoryLabelKey(order.category);
+  const catColor = color(order.category);
 
   return (
     <TouchableOpacity
@@ -19,7 +19,7 @@ export default function OrderCard({order, onPress}) {
       <View style={styles.top}>
         <View style={[styles.badge, {backgroundColor: `${catColor}1A`}]}>
           <Text style={[styles.badgeText, {color: catColor}]}>
-            {categoryKey ? t(categoryKey) : order.category}
+            {label(order.category)}
           </Text>
         </View>
         <View style={[styles.badge, {backgroundColor: status.bg}]}>

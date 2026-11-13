@@ -11,15 +11,13 @@ import {
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import {fetchSchedule} from '../../api';
-import {CATEGORIES} from '../components/CategoryChips';
 import {parseIsoDate, toIsoDate} from '../components/DateCalendar';
 import OrderCard from '../components/OrderCard';
 import {useAuth} from '../context/AuthContext';
+import {useCategories} from '../context/CategoriesContext';
 import {useLanguage} from '../context/LanguageContext';
-import {categoryLabelKey, errorText} from '../i18n/translations';
-import {categoryColor, colors} from '../theme';
-
-const TRADES = CATEGORIES.filter(category => category !== 'Все');
+import {errorText} from '../i18n/translations';
+import {colors} from '../theme';
 
 function shiftIso(iso, delta) {
   const parsed = parseIsoDate(iso);
@@ -47,6 +45,7 @@ function formatDay(iso, t) {
 export default function DayBoardScreen({navigation}) {
   const {token} = useAuth();
   const {t} = useLanguage();
+  const {categories, label, color, reload: reloadCategories} = useCategories();
   const today = toIsoDate(new Date());
   const [date, setDate] = useState(today);
   const [board, setBoard] = useState(null);
@@ -90,11 +89,25 @@ export default function DayBoardScreen({navigation}) {
     }, [load]),
   );
 
+  const onRefresh = () => {
+    reloadCategories();
+    load();
+  };
+
   const openOrder = orderId =>
     navigation.navigate('OrderDetail', {orderId});
 
   const workers = board?.workers || [];
   const unassigned = board?.unassigned || [];
+  const knownTrades = categories.map(category => category.id);
+  const trades = [
+    ...knownTrades,
+    ...new Set(
+      workers
+        .map(worker => worker.category)
+        .filter(id => !knownTrades.includes(id)),
+    ),
+  ];
 
   return (
     <View style={styles.container}>
@@ -137,7 +150,7 @@ export default function DayBoardScreen({navigation}) {
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
-              onRefresh={load}
+              onRefresh={onRefresh}
               tintColor={colors.primary}
             />
           }>
@@ -153,16 +166,15 @@ export default function DayBoardScreen({navigation}) {
               />
             ))
           )}
-          {TRADES.map(trade => {
+          {trades.map(trade => {
             const group = workers.filter(worker => worker.category === trade);
             if (group.length === 0) {
               return null;
             }
-            const labelKey = categoryLabelKey(trade);
             return (
               <View key={trade}>
-                <Text style={[styles.section, {color: categoryColor(trade)}]}>
-                  {labelKey ? t(labelKey) : trade}
+                <Text style={[styles.section, {color: color(trade)}]}>
+                  {label(trade)}
                 </Text>
                 {group.map(worker => (
                   <View key={worker.id} style={styles.workerBlock}>
